@@ -86,5 +86,4 @@ int main() {
     push(22); print();
     push(23); print();
     append(33); print();
-    free();
 }
