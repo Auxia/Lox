@@ -60,11 +60,36 @@ public class Scanner {
                     addToken(SLASH);
                 }
                 break;
+            case ' ':
+            case '\r':
+            case '\t':
+                break;
+            case '\n':
+                line++;
+                break;
+            case '"': string(); break;
 
             default:
                 Lox.error(line, "Unexpected character '" + c + "'");
                 break;
         }
+    }
+
+    private void string() {
+        while (peek() != '"' && !isAtEnd()) {
+            if (peek() == '\n') line++;
+            advance();
+        }
+
+        if(isAtEnd()) {
+            Lox.error(line, "Unexpected end of string");
+            return;
+        }
+
+        advance();
+
+        String value = source.substring(start+1, current-1);
+        addToken(STRING, value);
     }
 
     private boolean match(char expected) {
